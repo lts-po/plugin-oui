@@ -105,7 +105,7 @@ verify the api proxy is working:
 $ curl -u "admin:$PASS" http://localhost/plugins/oui/001122
 ```
 
-**NOTE:** For convenience you can share a plugins state directory and only mount it `docker-compose.yaml` under api:
+*NOTE:* For convenience you can share a plugins state directory and mount it `docker-compose.yaml` under api:
 ```yaml
       - ./state/plugins/:/state/plugins/
 ```
