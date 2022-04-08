@@ -1,15 +1,20 @@
 const http = require('http')
 const fs = require('fs')
 
-const SOCKET = './http.sock'
+const SOCKET = process.argv.length > 2 ? process.argv[2] : './http.sock'
+
+try {
+  fs.unlinkSync(SOCKET)
+} catch(err) {}
 
 const oui = JSON.parse(fs.readFileSync('./oui.json'))
 
 const server = http.createServer((req, res) => {
-  console.log(` ${req.method} ${req.url}`)
+  let date = new Date().toLocaleString()
+  console.log(`${date} ${req.method} ${req.url}`)
 
   let m = null
-  if (req.method == 'GET' && (m = req.url.match(/^\/oui\/([0-9a-f]{6})/i))) {
+  if (req.method == 'GET' && (m = req.url.match(/^\/([0-9a-f]{6})$/i))) {
     let prefix = m[1]
     res.setHeader('Content-Type', 'application/json')
     let data = oui[prefix] || null
@@ -30,4 +35,5 @@ const shutdown = () => {
 
 server.listen(SOCKET)
 
+process.on('exit', shutdown)
 process.on('SIGINT', shutdown)
