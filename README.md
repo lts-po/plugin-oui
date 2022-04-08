@@ -12,7 +12,7 @@ $ git clone https://github.com/lts-po/plugin-oui.git
 $ mkdir state/plugin-oui
 ```
 
-add the container to docker-compose.yaml:
+add the container to `docker-compose.yaml`:
 
 ```yaml
   plugin-oui:
@@ -38,9 +38,9 @@ make sure the api is running:
 $ curl --unix-socket ./state/plugin-oui/oui_plugin http:///localhost/001122
 ```
 
-### add plugin to API
+### Add plugin to the API
 
-add the plugin to the api in `state/api/config`
+add a defenition under `Plugins` in `state/api/config`:
 ```json
 {
   "Plugins" : [
@@ -63,7 +63,7 @@ add the plugin to the api in `state/api/config`
 }
 ```
 
-make sure the state directory is mounted:
+make sure the state directory is mounted for api in `docker-compose.yaml`:
 ```
   api:
     container_name: superapi
@@ -96,7 +96,8 @@ make sure the state directory is mounted:
 and restart the api:
 
 ```sh
-$ docker-compose restart api
+$ docker-compose stop api
+$ docker-compose up -d api
 ```
 
 verify the api proxy is working:
@@ -109,7 +110,7 @@ $ curl -u "admin:$PASS" http://localhost/plugins/oui/001122
       - ./state/plugins/:/state/plugins/
 ```
 
-## standalone
+## Standalone
 
 start the server:
 ```sh
@@ -121,3 +122,6 @@ testing the api:
 $ curl --unix-socket ./http.sock http:///localhost/001122
 {"provider":"CIMSYS Inc","country":"Korea, Republic Of"}
 ```
+
+# Notes
+`oui.json` is from https://github.com/silverwind/oui/blob/master/oui.json
