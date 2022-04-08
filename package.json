@@ -1,0 +1,24 @@
+{
+  "name": "plugin-oui",
+  "version": "1.0.0",
+  "description": "sample spr plugin for oui data",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://lts-po@github.com/lts-po/plugin-oui.git"
+  },
+  "keywords": [
+    "spr",
+    "oui"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lts-po/plugin-oui/issues"
+  },
+  "homepage": "https://github.com/lts-po/plugin-oui#readme"
+}
