@@ -14,19 +14,34 @@ const server = http.createServer((req, res) => {
   console.log(`${date} ${req.method} ${req.url}`)
 
   let m = null
-  if (req.method == 'GET' && (m = req.url.match(/^\/([0-9a-f]{6})$/i))) {
-    let prefix = m[1]
-    res.setHeader('Content-Type', 'application/json')
-    let data = oui[prefix] || null
+  if (req.method == 'GET' && (m = req.url.match(/^\/([0-9a-f:,]+)/i))) {
+    let prefixs = m[1]
+      .split(',')
+      .map((mac) => mac.replace(/:/g, '').toUpperCase())
+      .filter((mac) => mac.length == 6)
 
-    if (!data) {
+    let result = prefixs
+      .map((prefix) => {
+        if (!oui[prefix]) {
+          return null
+        }
+
+        let [provider, addr1, addr2, country] = oui[prefix].split('\n')
+
+        return { provider, country, prefix }
+      })
+      .filter((x) => x)
+
+    if (!result.length) {
       res.writeHead(404, { 'Content-Type': 'text/plain' })
       return res.end(`404 - not found`)
     }
 
-    let [provider, addr1, addr2, country] = data.split('\n')
-    let result = { provider, country }
+    if (prefixs.length == 1) {
+      result = result[0]
+    }
 
+    res.setHeader('Content-Type', 'application/json')
     res.write(JSON.stringify(result))
     return res.end()
   }
