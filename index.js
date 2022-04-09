@@ -17,7 +17,7 @@ const server = http.createServer((req, res) => {
   if (req.method == 'GET' && (m = req.url.match(/^\/([0-9a-f:,]+)/i))) {
     let prefixs = m[1]
       .split(',')
-      .map((mac) => mac.replace(/:/g, '').toUpperCase())
+      .map((mac) => mac.replace(/:/g, '').toUpperCase().substr(0, 6))
       .filter((mac) => mac.length == 6)
 
     let result = prefixs
