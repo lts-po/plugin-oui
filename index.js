@@ -5,7 +5,7 @@ const SOCKET = process.argv.length > 2 ? process.argv[2] : './http.sock'
 
 try {
   fs.unlinkSync(SOCKET)
-} catch(err) {}
+} catch (err) {}
 
 const oui = JSON.parse(fs.readFileSync('./oui.json'))
 
@@ -18,8 +18,14 @@ const server = http.createServer((req, res) => {
     let prefix = m[1]
     res.setHeader('Content-Type', 'application/json')
     let data = oui[prefix] || null
+
+    if (!data) {
+      res.writeHead(404, { 'Content-Type': 'text/plain' })
+      return res.end(`404 - not found`)
+    }
+
     let [provider, addr1, addr2, country] = data.split('\n')
-    let result = data ? { provider, country } : { error: 'not found' }
+    let result = { provider, country }
 
     res.write(JSON.stringify(result))
     return res.end()
